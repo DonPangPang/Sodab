@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sodab.Abstracts\Sodab.Abstracts.csproj" />
+    <ProjectReference Include="..\Sodab.Attributes\Sodab.Attributes.csproj" />
     <ProjectReference Include="..\Sodab.Common\Sodab.Common.csproj" />
     <ProjectReference Include="..\Sodab.Shared\Sodab.Shared.csproj" />
   </ItemGroup>
@@ -20,6 +21,7 @@
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
