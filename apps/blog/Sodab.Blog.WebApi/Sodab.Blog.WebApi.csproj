@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Sodab.Framework\Sodab.Framework.csproj" />
+    <ProjectReference Include="..\Sodab.Blog.Domain\Sodab.Blog.Domain.csproj" />
+    <ProjectReference Include="..\Sodab.Blog.Shared\Sodab.Blog.Shared.csproj" />
   </ItemGroup>
 
 </Project>

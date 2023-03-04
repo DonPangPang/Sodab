@@ -6,7 +6,7 @@ namespace Sodab.Common;
 
 public static class GzipExtensions
 {
-    public static string GZip(this string str)
+    public static string Gzip(this string? str)
     {
         if (string.IsNullOrEmpty(str) || str.Length == 0)
         {
@@ -25,7 +25,7 @@ public static class GzipExtensions
         return Convert.ToBase64String(ms.ToArray());
     }
 
-    public static async Task<string> GZipAsync(this string str)
+    public static async Task<string> GzipAsync(this string? str)
     {
         if (string.IsNullOrEmpty(str) || str.Length == 0)
         {
@@ -44,7 +44,7 @@ public static class GzipExtensions
         return Convert.ToBase64String(ms.ToArray());
     }
 
-    public static async Task<string> UnGzipAsync(this string str)
+    public static async Task<string> UnGzipAsync(this string? str)
     {
         if (string.IsNullOrEmpty(str) || str.Length == 0)
         {
@@ -79,7 +79,7 @@ public static class GzipExtensions
         return Encoding.UTF8.GetString(outBuffer.ToArray());
     }
 
-    public static string UnGzip(this string str)
+    public static string UnGzip(this string? str)
     {
         if (string.IsNullOrEmpty(str) || str.Length == 0)
         {
@@ -114,7 +114,7 @@ public static class GzipExtensions
         return Encoding.UTF8.GetString(outBuffer.ToArray());
     }
 
-    private static bool IsBase64(String str)
+    private static bool IsBase64(string str)
     {
         String base64Pattern = "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$";
         return Regex.IsMatch(str, base64Pattern, RegexOptions.IgnoreCase);
