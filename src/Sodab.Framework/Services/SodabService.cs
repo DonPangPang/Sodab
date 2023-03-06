@@ -1,53 +1,50 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Sodab.Abstracts.DomainAbstracts;
 using Sodab.Attributes;
+using Sodab.Framework.Common;
 using Sodab.Framework.DbContexts;
 
 namespace Sodab.Framework.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class SodabService : ISodabService
+public class SodabServiceBase<TDbContext> : ISodabServiceBase<TDbContext> where TDbContext : DbContext
 {
-    private readonly SodabDbContext _context;
-
-    public SodabService(SodabDbContext context)
-    {
-        _context = context;
-    }
+    public static TDbContext DbContext => ServiceLocator.GetService<TDbContext>();
 
     public IQueryable<T> Query<T>() where T : class, IEntityBase
     {
-        return _context.Set<T>();
+        return DbContext.Set<T>();
     }
 
     public IDbContextTransaction BeginTransaction()
     {
-        return _context.Database.BeginTransaction();
+        return DbContext.Database.BeginTransaction();
     }
 
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        return await _context.Database.BeginTransactionAsync();
+        return await DbContext.Database.BeginTransactionAsync();
     }
 
     public void CommitTransaction()
     {
-        _context.Database.CommitTransaction();
+        DbContext.Database.CommitTransaction();
     }
 
     public async Task CommitTransactionAsync()
     {
-        await _context.Database.CommitTransactionAsync();
+        await DbContext.Database.CommitTransactionAsync();
     }
 
     public int SaveChanges()
     {
-        return _context.SaveChanges();
+        return DbContext.SaveChanges();
     }
 
     public async Task<int> SaveChangeAsync()
     {
-        return await _context.SaveChangesAsync();
+        return await DbContext.SaveChangesAsync();
     }
 }

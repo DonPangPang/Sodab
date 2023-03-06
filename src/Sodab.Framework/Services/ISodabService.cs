@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Sodab.Abstracts.DomainAbstracts;
 
 namespace Sodab.Framework.Services;
 
-public interface ISodabService
+public interface ISodabServiceBase<TDbContext> where TDbContext : DbContext
 {
     IQueryable<T> Query<T>() where T : class, IEntityBase;
 

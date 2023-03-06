@@ -1,16 +1,97 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Sodab.Abstracts.DomainAbstracts;
 using Sodab.Abstracts.ViewModelAbstracts;
 using Sodab.Attributes;
+using Sodab.Framework.Common;
+using Sodab.Framework.DbContexts;
 
 namespace Sodab.Framework.Services;
 
 [Service(ServiceLifetime.Scoped)]
-public class SodabCrudService<TEntity, TViewModel> : SodabCrudService<Guid, TEntity, TViewModel>, ISodabCrudService<TEntity, TViewModel> where TEntity : IEntityBase where TViewModel : IViewModel
+public class SodabCrudService<TDbContext, TEntity> : SodabCrudService<TDbContext, Guid, TEntity>
+    where TEntity : class, IEntity where TDbContext : DbContext
 {
 }
 
 [Service(ServiceLifetime.Scoped)]
-public class SodabCrudService<TKey, TEntity, TViewModel> : ISodabCrudService<TEntity, TViewModel> where TEntity : IEntityBase where TViewModel : IViewModel
+public class SodabCrudService<TDbContext, TKey, TEntity> : SodabServiceBase<TDbContext>, ISodabCrudService<TDbContext, TKey, TEntity>
+    where TEntity : class, IEntity<TKey> where TDbContext : DbContext
 {
+    public async Task<IEnumerable<TEntity>> GetListAsync()
+    {
+        return await Query<TEntity>().ToListAsync();
+    }
+
+    public async Task<TEntity?> GetEntityByIdAsync(TKey id)
+    {
+        return await Query<TEntity>().FirstOrDefaultAsync(x => x.Id!.Equals(id));
+    }
+
+    public async Task<IEnumerable<TEntity?>> GetEntityByIdAsync(IEnumerable<TKey> ids)
+    {
+        return await Query<TEntity>().Where(x => ids.Contains(x.Id!)).ToListAsync();
+    }
+
+    public async Task AddEntityAsync(TEntity entity)
+    {
+        await DbContext.AddAsync(entity);
+
+        await SaveChangeAsync();
+    }
+
+    public async Task AddEntityAsync(IEnumerable<TEntity> entities)
+    {
+        await DbContext.AddRangeAsync(entities);
+
+        await SaveChangeAsync();
+    }
+
+    public async Task UpdateEntityAsync(TEntity entity)
+    {
+        DbContext.Update(entity);
+        await SaveChangeAsync();
+    }
+
+    public async Task UpdateEntityAsync(IEnumerable<TEntity> entities)
+    {
+        DbContext.UpdateRange(entities);
+        await SaveChangeAsync();
+    }
+
+    public async Task DeleteEntityById(TKey id)
+    {
+        var entity = await GetEntityByIdAsync(id);
+
+        if (entity is null) throw new Exception($"{id}不存在");
+
+        await DeleteEntityAsync(entity);
+    }
+
+    public async Task DeleteEntityByIds(IEnumerable<TKey> ids)
+    {
+        // ReSharper disable once PossibleMultipleEnumeration
+        var entities = await GetEntityByIdAsync(ids);
+
+        // ReSharper disable once PossibleMultipleEnumeration
+        if (entities is null || !entities.Any()) throw new Exception($"{string.Join(",", ids.ToList())}不存在");
+
+        // ReSharper disable once PossibleMultipleEnumeration
+        await DeleteEntityAsync(entities!);
+    }
+
+    public async Task DeleteEntityAsync(TEntity entity)
+    {
+        DbContext.Remove(entity);
+
+        await SaveChangeAsync();
+    }
+
+    public async Task DeleteEntityAsync(IEnumerable<TEntity> entities)
+    {
+        DbContext.RemoveRange(entities);
+
+        await SaveChangeAsync();
+    }
 }
