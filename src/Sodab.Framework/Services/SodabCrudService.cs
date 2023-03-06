@@ -36,27 +36,27 @@ public class SodabCrudService<TDbContext, TKey, TEntity> : SodabServiceBase<TDbC
 
     public async Task AddEntityAsync(TEntity entity)
     {
-        await DbContext.AddAsync(entity);
+        await Db.AddAsync(entity);
 
         await SaveChangeAsync();
     }
 
     public async Task AddEntityAsync(IEnumerable<TEntity> entities)
     {
-        await DbContext.AddRangeAsync(entities);
+        await Db.AddRangeAsync(entities);
 
         await SaveChangeAsync();
     }
 
     public async Task UpdateEntityAsync(TEntity entity)
     {
-        DbContext.Update(entity);
+        Db.Update(entity);
         await SaveChangeAsync();
     }
 
     public async Task UpdateEntityAsync(IEnumerable<TEntity> entities)
     {
-        DbContext.UpdateRange(entities);
+        Db.UpdateRange(entities);
         await SaveChangeAsync();
     }
 
@@ -83,14 +83,14 @@ public class SodabCrudService<TDbContext, TKey, TEntity> : SodabServiceBase<TDbC
 
     public async Task DeleteEntityAsync(TEntity entity)
     {
-        DbContext.Remove(entity);
+        Db.Remove(entity);
 
         await SaveChangeAsync();
     }
 
     public async Task DeleteEntityAsync(IEnumerable<TEntity> entities)
     {
-        DbContext.RemoveRange(entities);
+        Db.RemoveRange(entities);
 
         await SaveChangeAsync();
     }

@@ -11,40 +11,40 @@ namespace Sodab.Framework.Services;
 [Service(ServiceLifetime.Scoped)]
 public class SodabServiceBase<TDbContext> : ISodabServiceBase<TDbContext> where TDbContext : DbContext
 {
-    public static TDbContext DbContext => ServiceLocator.GetService<TDbContext>();
+    public static TDbContext Db => ServiceLocator.GetService<TDbContext>();
 
     public IQueryable<T> Query<T>() where T : class, IEntityBase
     {
-        return DbContext.Set<T>();
+        return Db.Set<T>();
     }
 
     public IDbContextTransaction BeginTransaction()
     {
-        return DbContext.Database.BeginTransaction();
+        return Db.Database.BeginTransaction();
     }
 
     public async Task<IDbContextTransaction> BeginTransactionAsync()
     {
-        return await DbContext.Database.BeginTransactionAsync();
+        return await Db.Database.BeginTransactionAsync();
     }
 
     public void CommitTransaction()
     {
-        DbContext.Database.CommitTransaction();
+        Db.Database.CommitTransaction();
     }
 
     public async Task CommitTransactionAsync()
     {
-        await DbContext.Database.CommitTransactionAsync();
+        await Db.Database.CommitTransactionAsync();
     }
 
     public int SaveChanges()
     {
-        return DbContext.SaveChanges();
+        return Db.SaveChanges();
     }
 
     public async Task<int> SaveChangeAsync()
     {
-        return await DbContext.SaveChangesAsync();
+        return await Db.SaveChangesAsync();
     }
 }
