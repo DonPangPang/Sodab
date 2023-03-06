@@ -16,7 +16,7 @@ public class Weblog : IEntity, IAudited
     public ICollection<Tag>? Tags { get; set; }
 
     private const int MaxLength = 100;
-    public string? Description => Content?[..MaxLength];
+    public string? Description => $"{Content?[..MaxLength]}...";
 
     private string? _content = string.Empty;
 
