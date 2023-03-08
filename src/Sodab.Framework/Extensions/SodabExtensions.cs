@@ -52,6 +52,13 @@ public static class SodabExtensions
     {
         services.AddServices();
 
+        services.AddAutoMapper(config =>
+        {
+            config.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+            config.RecognizePostfixes("ViewModel");
+            config.RecognizeDestinationPostfixes("ViewModel");
+        });
+
         return services;
     }
 
