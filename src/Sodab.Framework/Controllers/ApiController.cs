@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Sodab.Abstracts.DomainAbstracts;
 using Sodab.Abstracts.ViewModelAbstracts;
 using Sodab.Framework.Common;
@@ -14,13 +15,14 @@ public class ApiController : ControllerBase
 
 [ApiController]
 [Route("[Controller]/[Action]")]
-public class ApiController<TEntity, TViewModel> : ApiController<Guid, TEntity, TViewModel> where TEntity : IEntityBase where TViewModel : IViewModel
+public class ApiController<TDbContext, TEntity, TViewModel> : ApiController<TDbContext, Guid, TEntity, TViewModel>
+    where TEntity : IEntityBase where TViewModel : IViewModel where TDbContext : DbContext
 {
 }
 
 [ApiController]
 [Route("[Controller]/[Action]")]
-public class ApiController<TKey, TEntity, TViewModel> : ApiController where TEntity : IEntityBase where TViewModel : IViewModel
+public class ApiController<TDbContext, TKey, TEntity, TViewModel> : ApiController where TEntity : IEntityBase where TViewModel : IViewModel where TDbContext : DbContext
 {
-    internal static ISodabCrudService<TEntity, TViewModel> Service => ServiceLocator.GetService<ISodabCrudService<TEntity, TViewModel>>();
+    internal static ISodabCrudService<TDbContext, TKey, TEntity> Service => ServiceLocator.GetService<ISodabCrudService<TDbContext, TKey, TEntity>>();
 }
