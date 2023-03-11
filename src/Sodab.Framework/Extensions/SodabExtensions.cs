@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Sodab.Attributes;
 using Sodab.Framework.Common;
+using Sodab.Framework.DbContexts;
 
 namespace Sodab.Framework.Extensions;
 
@@ -48,7 +49,8 @@ public static class SodabExtensions
         return services;
     }
 
-    public static IServiceCollection AddSodab(this IServiceCollection services)
+    public static IServiceCollection AddSodab<TDbContext>(this IServiceCollection services)
+        where TDbContext : SodabDbContext
     {
         services.AddServices();
 
@@ -58,6 +60,8 @@ public static class SodabExtensions
             config.RecognizePostfixes("ViewModel");
             config.RecognizeDestinationPostfixes("ViewModel");
         });
+
+        services.AddDbContext<TDbContext>();
 
         return services;
     }

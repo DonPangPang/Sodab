@@ -21,4 +21,8 @@
     <ProjectReference Include="..\Sodab.Blog.Shared\Sodab.Blog.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>
